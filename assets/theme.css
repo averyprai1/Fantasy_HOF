@@ -1,0 +1,83 @@
+/* Design tokens used by app.css. Light by default, dark when the OS prefers it. */
+:root {
+  --font-anthropic-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-anthropic-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  --color-bg: #faf9f7;
+  --color-panel: #ffffff;
+  --color-fg: #1f1e1c;
+  --color-fg-muted: #6b6862;
+  --color-border-line: #e4e1db;
+  --color-ok: #2e7d4f;
+  --color-warn: #b5651d;
+  --color-bad: #c0392b;
+
+  --series-1: #2f6fdf;
+
+  --cds-font-size-caption: 0.8125rem;
+  --cds-font-size-body: 0.9375rem;
+  --cds-font-size-heading: 1.0625rem;
+  --cds-font-size-title: 1.5rem;
+  --cds-font-weight-medium: 600;
+
+  --cds-gap-xs: 4px;
+  --cds-gap-sm: 8px;
+  --cds-gap-md: 14px;
+  --cds-gap-lg: 20px;
+  --cds-gap-xl: 32px;
+  --cds-pad-xs: 4px;
+  --cds-pad-sm: 8px;
+  --cds-pad-md: 12px;
+  --cds-pad-lg: 18px;
+  --cds-pad-xl: 28px;
+  --cds-radius: 10px;
+
+  --cds-chart-grid: #ece9e3;
+  --cds-surface-popover: #ffffff;
+  --cds-border: #dcd8d0;
+  --cds-shadow-popover: 0 6px 20px rgba(0, 0, 0, 0.12);
+  --cds-text-secondary: #6b6862;
+  --cds-dur-slow: 300ms;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1b1a18;
+    --color-panel: #252421;
+    --color-fg: #f2f0ec;
+    --color-fg-muted: #a8a49c;
+    --color-border-line: #3a3834;
+    --color-ok: #5cc48a;
+    --color-warn: #e39a52;
+    --color-bad: #ef6b5b;
+    --series-1: #6b9cff;
+    --cds-chart-grid: #34322e;
+    --cds-surface-popover: #2c2b28;
+    --cds-border: #45423d;
+    --cds-shadow-popover: 0 6px 20px rgba(0, 0, 0, 0.5);
+    --cds-text-secondary: #a8a49c;
+  }
+}
+
+* { box-sizing: border-box; }
+html { background: var(--color-bg); }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-anthropic-sans);
+  line-height: 1.45;
+}
+#dash-root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(16px, 4vw, 40px);
+}
+.site-foot {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 40px) 32px;
+  font-size: var(--cds-font-size-caption);
+  color: var(--color-fg-muted);
+}
+.site-foot a { color: inherit; }
