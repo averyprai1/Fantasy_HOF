@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manager Hall of Fame</title>
+  <meta name="description" content="Our ESPN fantasy football league's road to the Manager Hall of Fame.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+  <link rel="stylesheet" href="assets/theme.css">
+  <link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div id="dash-root">
+<div class="hof">
+  <header id="top">
+    <h1>Manager Hall of Fame</h1>
+    <p class="take dash-skeleton" id="takeaway" data-source="summary"></p>
+    <div class="rules">
+      <span class="rule">Induction requires <b>2+ league titles</b></span>
+      <span class="rule"><b>5+ top-3 finishes</b></span>
+      <span class="rule">Playoffs in <b>65%+</b> of seasons</span>
+      <span class="rule"><b>.575+</b> career win % (incl. playoffs)</span>
+    </div>
+  </header>
+
+  <section class="tiles" id="tiles">
+    <div class="card tile"><div class="lbl">Hall of Famers</div><div class="val dash-skeleton" data-source="summary" data-field="inducted" data-row="0">—</div></div>
+    <div class="card tile"><div class="lbl">Titles awarded</div><div class="val dash-skeleton" data-source="summary" data-field="championships" data-row="0">—</div></div>
+    <div class="card tile"><div class="lbl">Different champions</div><div class="val dash-skeleton" data-source="summary" data-field="uniqueChampions" data-row="0">—</div></div>
+    <div class="card tile"><div class="lbl">Active managers</div><div class="val dash-skeleton" data-source="summary" data-field="managers" data-row="0">—</div></div>
+  </section>
+
+  <section id="road">
+    <div class="sec-head">
+      <h2>Road to the Hall</h2>
+      <p class="note">Each bar tracks one requirement; green means it's met. Win % fills from .400 up to the .575 bar. Titles, top-3 finishes and playoff rate count completed seasons only; win % includes this season's games so far. Cards are ordered by HOF points.</p>
+      <p class="note">Each card also shows the NFL head coach (3+ seasons) with the closest career profile. Both groups are ranked within themselves on titles, title rate, finals trips, playoff rate, win % and playoff win %, so a league-best manager lines up with a great coach; each coach is used once.</p>
+      <div class="seg" id="era-toggle" role="group" aria-label="Coach era">
+        <button type="button" data-era="modern" aria-pressed="true">Coaches: last 25 years</button>
+        <button type="button" data-era="all" aria-pressed="false">All-time</button>
+      </div>
+    </div>
+    <div class="road dash-skeleton" id="road-grid"></div>
+  </section>
+
+  <section class="two">
+    <div class="card" id="history">
+      <div class="sec-head"><h2>Finish by season</h2><p class="note">Final standing each year. Current season shows the live playoff seed.</p></div>
+      <div class="heat-wrap dash-skeleton" id="heat-wrap" data-source="seasons careers"><div class="heat" id="heat"></div><div class="tt" id="tt"></div></div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="card" id="trophies">
+      <div class="sec-head"><h2>Trophy case</h2><p class="note">League champions, newest first, with their regular-season record and playoff seed.</p></div>
+      <div class="tbl-box dash-skeleton" id="champ-box">
+        <table id="champ-tbl" data-source="champions" data-row-key="season">
+          <thead><tr><th data-field="season">Season</th><th class="l" data-field="champion">Champion</th><th class="l hide-n" data-field="team">Team</th><th data-field="record">Record</th><th data-field="seed">Seed</th><th class="l hide-n" data-field="runnerUp">Runner-up</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="careers">
+    <div class="sec-head"><h2>Career stats</h2><p class="note">Record and win % include championship-bracket playoff games (not consolation games). All-play is your regular-season record if you'd played every team every week, which strips out schedule luck. Click a header to sort.</p></div>
+    <div class="tbl-box dash-skeleton" id="career-box">
+      <table id="career-tbl" data-source="careers" data-row-key="manager">
+        <thead><tr></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card" id="score-def">
+    <h2>How HOF points work</h2>
+    <p class="note">Points rank managers on the road to the Hall. Induction itself is decided by the four requirements above.</p>
+    <div class="score-list">
+      <b>+4</b><span>League championship. A single title isn't even halfway to induction.</span>
+      <b>+1</b><span>Runner-up finish. Second place is no longer highly rewarded.</span>
+      <b>+1</b><span>Playoff appearance. Baseline entry to the postseason.</span>
+      <b>+1</b><span>Regular-season points leader. Rewards true roster dominance over lucky playoff runs.</span>
+      <b>−3</b><span>Last-place finish (Sacko). One last-place finish erases a whole championship.</span>
+    </div>
+  </section>
+
+  <section class="card" id="credits">
+    <h2>Coach photo credits</h2>
+    <p class="note">Freely licensed photos from Wikimedia Commons and Wikipedia.</p>
+    <ul class="credit-list dash-skeleton" id="credit-list" data-source="coach_photos"></ul>
+  </section>
+</div>
+</div>
+<footer class="site-foot">Data updated <span id="data-updated">—</span> from ESPN Fantasy. NFL coach records from Pro Football Reference.</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="data/data.js"></script>
+<script src="assets/dash.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (function () {
+    var at = (window.HOF_DATA || {}).updated;
+    if (at) document.getElementById('data-updated').textContent = new Date(at).toLocaleString(undefined, {dateStyle: 'medium', timeStyle: 'short'});
+  })();
+</script>
+</body>
+</html>

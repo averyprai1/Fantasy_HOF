@@ -1,0 +1,48 @@
+name: Refresh league data
+
+on:
+  schedule:
+    # Tuesdays at 14:00 UTC (9 AM Central during daylight time), after Monday Night Football.
+    - cron: "0 14 * * 2"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Pull league data from ESPN
+        env:
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          SWID: ${{ secrets.SWID }}
+          LEAGUE_ID: ${{ vars.LEAGUE_ID || '62116877' }}
+          START_YEAR: ${{ vars.START_YEAR || '2020' }}
+          INCLUDE_RETIRED: ${{ vars.INCLUDE_RETIRED || 'false' }}
+        run: python scripts/refresh.py
+
+      - name: Commit updated data
+        run: |
+          if git diff --quiet -- data/league_seasons.json; then
+            echo "No changes in league data."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "Refresh league data"
+          git push
